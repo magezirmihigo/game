@@ -1,0 +1,19 @@
+# Render blueprint. A persistent disk needs a paid plan; on the free plan the
+# filesystem is wiped on every restart, so accounts and tournaments would vanish.
+services:
+  - type: web
+    name: efootball-arena
+    runtime: node
+    plan: starter
+    buildCommand: echo "no build step, no dependencies"
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: ADMIN_USERNAME      # the username that becomes admin when it registers
+        sync: false
+      - key: DATA_DIR
+        value: /var/data
+    disk:
+      name: arena-data
+      mountPath: /var/data
+      sizeGB: 1
